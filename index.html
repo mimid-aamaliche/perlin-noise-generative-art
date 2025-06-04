@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Perlin Noise Example</title>
+  <style>
+    /* General Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #0a0a0a; /* Deep dark */
+    color: #e0e0e0; /* Light grey text */
+    font-family: 'Georgia', serif; /* Classy serif font */
+    padding: 2rem;
+    line-height: 1.6;
+  }
+
+  h2 {
+    color: #f2f2f2;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    text-shadow: 0 0 5px #777; /* Subtle glow */
+    border-left: 4px solid #444;
+    padding-left: 0.5rem;
+  }
+
+  canvas {
+    display: block;
+    margin: 0 auto 2rem auto;
+    background-color: #111; /* slightly lighter than the background */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    border: 1px solid #222;
+  }
+
+  br {
+    display: none;
+  }
+
+  </style>
+</head>
+<body>
+  <H2>Shape 1 : </H2>
+  <canvas id="noiseCanvas1" width="1000" height="1000"></canvas>
+  <br>
+    
+  <H2>Shape 2 : First Hearth </H2>
+  <canvas id="noiseCanvas2" width="1000" height="1000"></canvas>
+  <br>
+
+  <H2>Shape 3 : </H2>
+  <canvas id="noiseCanvas3" width="1000" height="1000"></canvas><br>
+
+  <H2>Shape 4 : </H2>
+  <canvas id="noiseCanvas4" width="1000" height="1300"></canvas><br>
+
+  <H2>Shape 5 : </H2>
+  <canvas id="noiseCanvas5" width="1000" height="1000"></canvas><br>
+
+  <H2>Shape 6 : </H2>
+  <canvas id="noiseCanvas6" width="1000" height="1000"></canvas><br>
+
+  <H2>Shape 7 :the Mess</H2>
+  <canvas id="noiseCanvas7" width="1000" height="1000"></canvas><br>
+
+
+  <H2>Shape 8 :</H2>
+  <canvas id="noiseCanvas8" width="1000" height="1000"></canvas><br>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/noisejs@2.1.0/index.min.js"></script>
+
+
+  <script>
+    // Example Perlin Noise (simple version, or use a library like noise.js)
+    // Here's a placeholder for your Perlin noise JS code
+
+
+        for(let i =1 ;i<9;i++){
+
+          
+
+          const canvas = document.getElementById('noiseCanvas'.concat(i));
+          const ctx = canvas.getContext('2d');
+
+          const width = canvas.width;
+          const height = canvas.height;
+          let OriginX=width/2;
+          let OriginY=height/2;
+          let t=0;
+          const noise = new Noise(Math.random());
+
+
+          let phase=0.1;
+
+          function Heartrayon1(angle,scale) {
+            const x = 16 * Math.pow(Math.sin(angle), 3)*scale;
+            const y =
+              (13 * Math.cos(angle) -
+              5 * Math.cos(2 * angle) -
+              2 * Math.cos(3 * angle) -
+              Math.cos(4 * angle)) * scale;
+            return Math.sqrt(x * x + y * y);
+          }
+
+          function Heartrayon2(angle) {
+            const sinT = Math.sin(angle);
+            const cosT = Math.cos(angle);
+            return 2 - 2 * sinT + (sinT * Math.sqrt(Math.abs(cosT))) / (sinT + 1.4);
+          }
+
+
+          function drawShape1() {
+            //clear the screen 
+            ctx.clearRect(0, 0, width, height);
+
+            //creat new image
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            //Controls the intensite of the wiglle
+            let amplitude=10;
+
+            let NumberOfHearts=30;
+
+            let counter=0;
+
+
+
+            //this Draws Simple Cercle 
+            for (let a = 0; a <= Math.PI*2; a+=0.01) {
+
+              
+              if(a <= Math.PI/2 || (a >= Math.PI && a <= 3*Math.PI/2)){
+                counter+=a;
+
+              }else{
+                counter-=a;
+
+
+              }
+
+              //simple cercle
+              let R = 50 + (noise.perlin2(Math.cos(a+t),Math.sin(a+t)))*amplitude + counter;
+
+
+              
+              
+              for(let i=0;i<NumberOfHearts;i++){
+
+                let x = Math.round(OriginX + R * Math.cos(i) * Math.cos(a+phase)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                let y = Math.round(OriginY + R * Math.sin(a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                  let index = (x + y * width) * 4;
+                  data[index] = 255;     // Red
+                  data[index + 1] = 255; // Green
+                  data[index + 2] = 255; // Blue
+                  data[index + 3] = 255; // Alpha
+                }
+
+
+              }
+              
+
+            }
+
+
+
+
+            phase+=0.01;
+            //this line Renders the image in the screen
+            ctx.putImageData(imageData, 0, 0);
+        
+            t += 0.01; // Increment time for animation
+            requestAnimationFrame(drawShape1);
+
+          }
+
+          function drawShape6() {
+            //clear the screen 
+            ctx.clearRect(0, 0, width, height);
+
+            //creat new image
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            //Controls the intensite of the wiglle
+            let amplitude=10;
+
+            let NumberOfHearts=30;
+
+            let counter=0;
+
+
+
+            //this Draws Simple Cercle 
+            for (let a = 0; a <= Math.PI*2; a+=0.01) {
+
+              
+              if(a <= Math.PI/2 || (a >= Math.PI && a <= 3*Math.PI/2)){
+                counter+=a;
+
+              }else{
+                counter-=a;
+
+
+              }
+
+              //simple cercle
+              let R = 50 + (noise.perlin2(Math.cos(a+t),Math.sin(a+t)))*amplitude + counter;
+
+
+              
+              
+              for(let i=0;i<NumberOfHearts;i++){
+
+                let x = Math.round(OriginX + R * Math.cos(i) * Math.cos(a+phase)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                let y = Math.round(OriginY + R * Math.sin(a+phase)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                  let index = (x + y * width) * 4;
+                  data[index] = 255;     // Red
+                  data[index + 1] = 255; // Green
+                  data[index + 2] = 255; // Blue
+                  data[index + 3] = 255; // Alpha
+                }
+
+
+              }
+              
+
+            }
+
+
+
+
+            phase+=0.01;
+            //this line Renders the image in the screen
+            ctx.putImageData(imageData, 0, 0);
+        
+            t += 0.01; // Increment time for animation
+            requestAnimationFrame(drawShape6);
+
+          }
+
+          function drawShape5() {
+            //clear the screen 
+            ctx.clearRect(0, 0, width, height);
+
+            //creat new image
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            //Controls the intensite of the wiglle
+            let amplitude=30;
+
+            let NumberOfHearts=30;
+
+            let counter=0;
+
+
+
+            //this Draws Simple Cercle 
+            for (let a = 0; a <= Math.PI*2; a+=0.01) {
+
+              
+              if(a <= Math.PI/2 || (a >= Math.PI && a <= 3*Math.PI/2)){
+                counter+=1.2;
+
+              }else{
+                counter-=1.2;
+
+
+              }
+
+              //simple cercle
+              let R = 100 + (noise.perlin2(Math.cos(a+t),Math.sin(a+t)))*amplitude + counter;
+
+
+              
+              
+              for(let i=0;i<NumberOfHearts;i++){
+
+                let x = Math.round(OriginX + R * Math.cos(i) * Math.cos(a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                let y = Math.round(OriginY + R * Math.sin(a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                  let index = (x + y * width) * 4;
+                  data[index] = 255;     // Red
+                  data[index + 1] = 255; // Green
+                  data[index + 2] = 255; // Blue
+                  data[index + 3] = 255; // Alpha
+                }
+
+
+              }
+              
+
+            }
+
+
+
+
+            phase+=0.01;
+            //this line Renders the image in the screen
+            ctx.putImageData(imageData, 0, 0);
+        
+            t += 0.01; // Increment time for animation
+            requestAnimationFrame(drawShape5);
+
+          }
+
+          function drawShape4() {
+            //clear the screen 
+            ctx.clearRect(0, 0, width, height);
+
+            //creat new image
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            //Controls the intensite of the wiglle
+            let amplitude=10;
+
+            let NumberOfHearts=30;
+
+            let counter=0;
+
+
+            //the eyes origine cordinate
+            let EyeY=650;
+
+            let FirstEyeX=300;
+            let SeconEyeX=700;
+
+            //eye rayon
+            let EyeRayon=100;
+
+
+
+
+            //this Draws Simple Cercle 
+            for (let a = 0; a <= Math.PI*2; a+=0.01) {
+
+              
+              if(a <= Math.PI/2 || a <= 3*Math.PI/2){
+                counter+=1;
+
+              }else{
+                counter-=1;
+
+
+              }
+
+              //simple cercle
+              let R = 50 + (noise.perlin2(Math.cos(a+t),Math.sin(a+t)))*amplitude + counter;
+
+
+              
+              
+              for(let i=0;i<NumberOfHearts;i++){
+
+                let x = Math.round(OriginX + R * Math.cos(i) * Math.cos(-a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                let y = Math.round(OriginY + R * Math.sin(-a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                   //first eye check
+                   //we need to calculate the distance between the eye origine and the current pixel
+                   //if it smaller then the eye rayon the skip or draw it in different color
+                   //to optimize we will compare the squared value
+                  let EyeNoiseAmplitude=40;
+
+                  let disFromTheFirstEye=Math.sqrt(Math.pow(x-FirstEyeX,2)+Math.pow(y-EyeY,2));
+                  if( disFromTheFirstEye < EyeRayon){
+
+
+                    //we need a way to translate the current point to the nearest point in the eye boundries
+                    //first get the angle of the vector (EyeOrigine_CurrentPoint)
+                    
+                    let AngleOfPoint=Math.atan2(FirstEyeX-x,EyeY-y);
+                    //adjust the angle 
+                    if(AngleOfPoint<0) AngleOfPoint+=2*Math.PI;
+
+
+                    //now let s calculate the new values of the point
+                     x = Math.round(FirstEyeX + EyeRayon*Math.cos(AngleOfPoint))+Math.round((noise.perlin2(Math.cos(AngleOfPoint+t),Math.sin(AngleOfPoint+t)))*EyeNoiseAmplitude);
+                     y = Math.round(EyeY + EyeRayon*Math.sin(AngleOfPoint))+Math.round((noise.perlin2(Math.cos(AngleOfPoint+t),Math.sin(AngleOfPoint+t)))*EyeNoiseAmplitude);
+
+
+
+                    //we can also draw more stuff in the eye
+                    //that's for later tho
+
+
+
+
+                    
+                  }else{
+
+
+                  
+                  
+                    let disFromTheSecondEyeSquared=Math.pow(x-SeconEyeX,2)+Math.pow(y-EyeY,2)
+                      
+                      
+                    if( disFromTheSecondEyeSquared < EyeRayon*EyeRayon){
+
+                      //here will do the same thing
+                      //for each point inside the aye(cercle) will compute it closeset point in the boundries of the cercle
+
+
+                      let AngleOfPoint=Math.atan2(SeconEyeX-x,EyeY-y);
+                      //adjust the angle 
+                      if(AngleOfPoint<0) AngleOfPoint+=2*Math.PI;
+
+
+                      //now let s calculate the new values of the point
+                      x = Math.round(SeconEyeX + EyeRayon*Math.cos(AngleOfPoint))+Math.round((noise.perlin2(Math.cos(AngleOfPoint+t),Math.sin(AngleOfPoint+t)))*EyeNoiseAmplitude);
+                      y = Math.round(EyeY + EyeRayon*Math.sin(AngleOfPoint))+Math.round((noise.perlin2(Math.cos(AngleOfPoint+t),Math.sin(AngleOfPoint+t)))*EyeNoiseAmplitude);
+
+
+
+
+
+                        
+                    }
+                  }
+                  
+
+
+
+                  let index = (x + y * width) * 4;
+                  data[index] = 255;     // Red
+                  data[index + 1] = 255; // Green
+                  data[index + 2] = 255; // Blue
+                  data[index + 3] = 255; // Alpha
+                }
+
+
+              }
+              
+
+            }
+
+
+
+
+            phase+=0.01;
+            //this line Renders the image in the screen
+            ctx.putImageData(imageData, 0, 0);
+        
+            t += 0.01; // Increment time for animation
+            requestAnimationFrame(drawShape4);
+
+          }
+
+          function drawShape3() {
+            //clear the screen 
+            ctx.clearRect(0, 0, width, height);
+
+            //creat new image
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            //Controls the intensite of the wiglle
+            let amplitude=30;
+
+            let NumberOfHearts=15;
+
+            let counter=0;
+
+
+
+            //this Draws Simple Cercle 
+            for (let a = 0; a <= Math.PI*2; a+=0.01) {
+
+              
+              if(a <= Math.PI/2){
+                counter+=1;
+
+              }else{
+                counter-=1;
+
+
+              }
+
+              //simple cercle
+              let R = 50 + (noise.perlin2(Math.cos(a+t),Math.sin(a+t)))*amplitude + counter;
+
+
+              
+              
+              for(let i=0;i<NumberOfHearts;i++){
+
+                let x = Math.round(OriginX + R * Math.cos(i) * Math.cos(a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                let y = Math.round(OriginY + R * Math.sin(a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                  let index = (x + y * width) * 4;
+                  data[index] = 255;     // Red
+                  data[index + 1] = 255; // Green
+                  data[index + 2] = 255; // Blue
+                  data[index + 3] = 255; // Alpha
+                }
+
+
+              }
+              
+
+            }
+
+
+
+
+            phase+=0.01;
+            //this line Renders the image in the screen
+            ctx.putImageData(imageData, 0, 0);
+        
+            t += 0.01; // Increment time for animation
+            requestAnimationFrame(drawShape3);
+
+          }
+
+          function drawSphere() {
+            //clear the screen 
+            ctx.clearRect(0, 0, width, height);
+
+            //creat new image
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            //Controls the intensite of the wiglle
+            let amplitude=40;
+
+            let NumberOfHearts=15;
+
+
+            //this Draws Simple Cercle 
+            for (let a = 0; a <= Math.PI*2; a+=0.01) {
+
+              
+              
+
+              //simple cercle
+              let R = 150 + (noise.perlin2(Math.cos(a+t),Math.sin(a+t)))*amplitude;
+
+
+              
+              
+              for(let i=0;i<NumberOfHearts;i++){
+
+                let x = Math.round(OriginX + R * Math.cos(i) * Math.cos(a+phase)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                let y = Math.round(OriginY + R * Math.sin(a+phase)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                  let index = (x + y * width) * 4;
+                  data[index] = 255;     // Red
+                  data[index + 1] = 255; // Green
+                  data[index + 2] = 255; // Blue
+                  data[index + 3] = 255; // Alpha
+                }
+
+
+              }
+              
+
+            }
+
+
+
+
+            phase+=0.1;
+            //this line Renders the image in the screen
+            ctx.putImageData(imageData, 0, 0);
+        
+            t += 0.01; // Increment time for animation
+            requestAnimationFrame(drawSphere);
+
+          }
+
+          function drawHeart() {
+            //clear the screen 
+            ctx.clearRect(0, 0, width, height);
+
+            //creat new image
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            //Controls the intensite of the wiglle
+            let amplitude=20;
+
+            let NumberOfHearts=5;
+
+
+            //this Draws Simple Cercle 
+            for (let a = 0; a <= Math.PI*2; a+=0.01) {
+
+              //(noise.perlin2(Math.cos(a+t),Math.sin(a+t)))  this gives a noise value between 0,1
+              
+              //heart shape
+              let R =  Heartrayon2(-a)*50 + (noise.perlin2(Math.cos(a+t),Math.sin(a+t)))*amplitude;
+              
+
+              
+
+              
+              
+              for(let i=0;i<NumberOfHearts;i++){
+
+                let x = Math.round(OriginX + R * Math.cos(a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                let y = Math.round(OriginY + R * Math.sin(a)) + Math.round((noise.perlin2(Math.cos(a+t+i),Math.sin(a+t+i)))*amplitude+i);
+                
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                  let index = (x + y * width) * 4;
+                  data[index] = 255;     // Red
+                  data[index + 1] = 255; // Green
+                  data[index + 2] = 255; // Blue
+                  data[index + 3] = 255; // Alpha
+                }
+
+
+              }
+              
+
+            }
+
+
+
+
+            phase+=0.01;
+            //this line Renders the image in the screen
+            ctx.putImageData(imageData, 0, 0);
+        
+            t += 0.01; // Increment time for animation
+            requestAnimationFrame(drawHeart);
+
+          }
+
+          function drawShape8() {
+            //clear the screen 
+            ctx.clearRect(0, 0, width, height);
+
+            //creat new image
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+
+            //Controls the intensite of the wiglle
+            let amplitude=50;
+
+            let NumberOfHearts=15;
+
+            let counter=0;
+
+
+
+            //this Draws Simple Cercle 
+            for (let a = 0; a <= Math.PI*2; a+=0.01) {
+
+              
+              if(a <= Math.PI/2 || a >= 3*Math.PI/2){
+                counter+=Math.cos(a);
+
+              }else{
+                counter-=Math.cos(a);
+
+
+              }
+
+              //simple cercle
+              let R = 10 + (noise.perlin2(Math.cos(a),Math.sin(a)))*amplitude + counter;
+
+
+              
+              
+              for(let i=0;i<NumberOfHearts;i++){
+
+                let x = Math.round(OriginX + R  * Math.cos(a+phase)) + Math.round((noise.perlin2(Math.cos(a),Math.sin(a)))*amplitude*counter);
+                let y = Math.round(OriginY + R * Math.sin(a)) + Math.round((noise.perlin2(Math.cos(a),Math.sin(a)))*amplitude*counter);
+                
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                  let index = (x + y * width) * 4;
+                  data[index] = 255;     // Red
+                  data[index + 1] = 255; // Green
+                  data[index + 2] = 255; // Blue
+                  data[index + 3] = 255; // Alpha
+                }
+
+
+              }
+              
+
+            }
+
+
+
+
+            phase+=0.01;
+            //this line Renders the image in the screen
+            ctx.putImageData(imageData, 0, 0);
+        
+            t += 0.01; // Increment time for animation
+            requestAnimationFrame(drawShape8);
+
+          }
+
+         switch(i) {
+            case 1:
+              // code block
+                drawShape1();
+
+              break;
+            case 2:
+              drawHeart();
+
+              break;
+              case 3:
+                
+              drawShape3();
+              break;
+              case 4:
+               drawShape4();
+              break;
+              case 5:
+             drawShape5();
+              break;
+              case 6:
+              drawShape6();
+              break;
+              case 7:
+                drawSphere();
+                break;
+            default:
+               drawShape8();
+          }
+         
+
+
+        }
+  </script>
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
