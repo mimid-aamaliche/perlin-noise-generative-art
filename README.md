@@ -11,5 +11,5 @@ The goal is to experiment with noise functions and visual randomness to generate
 
 ## 🚀 Live Demo
 
-Check out the live version here: [https://yourusername.github.io/perlin-noise-generative-art](https://mimid-aamaliche.github.io/perlin-noise-generative-art)
+----> [Check out the live version](https://mimid-aamaliche.github.io/perlin-noise-generative-art)
 
